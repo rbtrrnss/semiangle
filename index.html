@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semiangle Calculator</title>
+  <!--
+  Original HTML Application (HTA) written by Armand Béché (~2008).
+  Adapted to a web page by Alexander Zintler (2025).  
+  -->
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 1em;
+    }
+    label { font-weight: bold; display: block; margin-top: 1em; }
+    input { width: 90%; padding: 0.4em; max-width: 550px;}
+    .input-block {
+      display: flex;
+      gap: 1em;
+      align-items: flex-end;
+      margin-top: 1em;
+    }
+    .input-block label {
+      flex: 1 1 0;
+      margin: 0;
+      font-weight: bold;
+    }
+    .output { margin-top: 1em; background: #f0f0f0; padding: 1em; border-radius: 6px; max-width: 525px }
+    button.ht-preset { margin: 0.5em 0.3em; padding: 6px 10px; font-size: 1.1em;}
+    #button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1.5em;
+    }
+    .targets { margin-top: 1em; max-width: 550px; }
+    .targets table, th, td { border: 1px solid gray; }
+    .targets table { width: 100%; border-collapse: collapse; table-layout: auto; }
+    .targets td {
+      font-weight: normal;
+      padding: 0.1rem;
+      text-align: center;
+    }
+    #button-container button {
+      padding: 12px 20px;
+      font-size: 1.2em;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1em auto 0 auto;
+      height: 150px;
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Semiangle Calculator</h1>
+
+  <form onsubmit="calculate(); return false;">
+    <label>High Tension (HT) [kV]:
+      <input type="number" id="ht" value="300" enterkeyhint="next">
+    </label>
+    Presets:
+    <button type="button" class="ht-preset" onclick="setHT(60)" tabindex="-1">60</button>
+    <button type="button" class="ht-preset" onclick="setHT(80)" tabindex="-1">80</button>
+    <button type="button" class="ht-preset" onclick="setHT(120)" tabindex="-1">120</button>
+    <button type="button" class="ht-preset" onclick="setHT(200)" tabindex="-1">200</button>
+    <button type="button" class="ht-preset" onclick="setHT(300)" tabindex="-1">300</button>
+    <div class="input-block">
+      <label>BF disk diameter [px]:
+        <input type="number" id="bf_disk" value="210" enterkeyhint="next" step="any">
+      </label>
+
+      <label>Au (111) diameter [px]:
+        <input type="number" id="au_diameter" value="100" enterkeyhint="next" step="any">
+      </label>
+    </div>
+
+    <div class="input-block">
+      <label>Desired semiangle [mrad]:
+        <input type="number" id="desired_angle" value="21" enterkeyhint="next" step="any">
+      </label>
+
+      <label>UI displayed semiangle [mrad]:
+        <input type="number" id="ui_angle" value="20.7" enterkeyhint="send" step="any">
+      </label>
+    </div>
+
+    <div id="button-container">
+      <button type="submit">Calculate</button>
+    </div>
+  </form>
+
+  <div class="output" id="output"></div>
+
+  <div class="targets" id="targets">
+    <details>
+      <summary>aberration target parameters 300 kV</summary>
+       <table>
+        <tr>
+          <th>C1</th>
+          <th>A1</th>
+          <th>B2</th>
+          <th title="use A2 coarse, if HPx/HPy >30mA, reset A2">A2</th>
+          <th>C3</th>
+          <th style="background-color:lemonchiffon" title="30% steps, check low orders again">S3</th>
+          <th style="background-color:lemonchiffon" title="before correcting: &#013;image mode, &#013;medium mag, &#013;mark beam position &#013;&#013;apply correction, &#013;recenter with DPH1">A3</th>
+          <th style="background-color:lemonchiffon">A4</th>
+        </tr>
+        <tr>
+          <td>~0 nm</td>
+          <td>&#60;5 nm</td>
+          <td>&#60;20 nm</td>
+          <td>&#60;50 nm</td>
+          <td>~1 µm</td>
+          <td style="background-color:lemonchiffon">&#60;500 nm</td>
+          <td style="background-color:lemonchiffon">&#60;2 µm</td>
+          <td style="background-color:lemonchiffon">&#60;50 µm</td>
+        </tr>
+      </table>
+    </details>
+  </div>
+
+  <div class="logo" id="logo">
+  <?xml version="1.0" encoding="UTF-8"?>
+  <svg fill="#000000" version="1.1" viewBox="0 -3 17.858 12.827" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-38.364 -20.694)"><path d="m42.54 30.513c-0.98779-0.1618-1.652-0.62656-2.029-1.4198-0.0748-0.15736-0.16592-0.40651-0.2025-0.55366-0.08487-0.34146-0.11547-1.0124-0.06569-1.4401 0.03919-0.33672 0.21612-1.1212 0.25287-1.1212 0.01221 0 0.07636 0.09261 0.14258 0.2058l0.12039 0.2058-0.05054 0.3457c-0.09702 0.66366-0.05682 1.257 0.12062 1.7802 0.13198 0.38915 0.26392 0.61108 0.53408 0.8983 0.26354 0.28019 0.52973 0.45737 0.87931 0.58528 0.38334 0.14026 0.67166 0.18673 1.1588 0.18673 0.72689 0 1.4525-0.14887 2.244-0.46041 0.3928-0.15461 1.1173-0.50568 1.3877-0.67247 0.087-0.05365 0.23649-0.14334 0.3322-0.19929 0.19153-0.11198 0.66787-0.43672 0.89578-0.61069l0.14566-0.11119 0.06806 0.09558c0.07953 0.11169 0.11777 0.06794-0.35408 0.405-1.2627 0.90202-2.5924 1.5206-3.8243 1.7791-0.39932 0.08379-0.53662 0.09759-1.0599 0.10654-0.33061 0.0057-0.64383 0.0033-0.69603-0.0053zm6.6376-2.0291c-0.31913-0.11389-0.5387-0.31469-0.69874-0.63898-0.07517-0.15231-0.08587-0.42814-0.08587-0.47456 0-0.04407 0.01089-0.32413 0.09178-0.49931 0.19205-0.4159 0.60458-0.68145 1.063-0.68427 0.45162-0.0028 0.87013 0.26663 1.063 0.68427 0.08094 0.17528 0.09129 0.43571 0.09178 0.50005 4.63e-4 0.06036-0.0086 0.31883-0.10282 0.51008-0.12249 0.24872-0.32207 0.44343-0.57185 0.55789-0.24029 0.11011-0.61238 0.12973-0.85027 0.04483zm-8.0887-1.9757c-0.16702-0.28944-2.6399-4.6964-2.6899-4.7937-0.04156-0.08087-0.04428-0.10678-0.01247-0.11895 0.02236-0.0086 0.8379-0.01186 1.8123-0.0073l1.7716 0.0082 0.48926 0.82258-2.4898 0.03164 0.30314 0.52993 0.30314 0.52993 2.1853 3.79e-4 0.18983 0.33156c0.1044 0.18236 0.19744 0.33177 0.20675 0.33201 0.0093 2.53e-4 0.08438-0.13125 0.16682-0.2922 0.08244-0.16096 0.39535-0.74111 0.69536-1.2892l0.54547-0.99659 0.65604-0.0086c0.36082-0.0047 0.65604-9.53e-4 0.65604 0.0083 0 0.0093-0.07868 0.37619-0.17485 0.81531-0.09617 0.43912-0.22611 1.0333-0.28876 1.3204-0.06265 0.28711-0.1399 0.62829-0.17166 0.75816-0.03176 0.12988-0.05442 0.23948-0.05035 0.24355 0.0091 0.0091 0.26136-0.29868 0.4958-0.60486 0.0957-0.12499 0.30434-0.39049 0.46362-0.59s0.35149-0.44262 0.42711-0.54025c0.07562-0.09763 0.35807-0.4566 0.62767-0.79773l0.49018-0.62023h0.78588c0.43223 0 0.78113 0.011 0.77533 0.02444-0.0058 0.01344-0.23308 0.44411-0.50506 0.95704-0.27198 0.51293-0.7827 1.4807-1.1349 2.1506s-0.69662 1.3213-0.7653 1.4474c-0.06869 0.12616-0.11939 0.22937-0.11268 0.22937 0.0067 0 0.33161-0.37969 0.72197-0.84375 0.71436-0.84922 2.7847-3.2978 3.1553-3.7318l0.19926-0.23334h0.59959c0.32977 0 0.59959 0.01226 0.59959 0.02725 0 0.0297-0.80549 4.4892-0.85139 4.7137-0.01548 0.07569-0.0174 0.12552-0.0043 0.11073 0.025-0.02814 2.0895-3.9033 2.0895-3.9221 0-0.0059-0.291-0.01462-0.64666-0.01933l-0.64666-0.0086 0.54045-0.90167h3.7262l-0.20972 0.40338c-0.11534 0.22186-0.22942 0.43541-0.25351 0.47456-0.04314 0.07013-0.05355 0.07118-0.70027 0.07118h-0.65648l-2.2536 4.0971-1.426 0.017c-0.09541-0.20919-0.32446-0.45073-0.50449-0.5268 0 0 0.04429-0.11559 0.07834-0.25741l0.01709-0.07118-1.8577 0.0032-0.36515 0.41757-0.36515 0.41756-2.1274 0.0166 0.08635-0.16652c0.04749-0.09158 0.33235-0.62921 0.63303-1.1947 0.77445-1.4566 0.89967-1.6968 0.86605-1.661-0.01634 0.0174-0.16488 0.20248-0.33008 0.41129-0.16521 0.20881-0.5841 0.73478-0.93088 1.1688s-0.7444 0.93555-0.88361 1.1144l-0.2531 0.32526-3.6198 0.001563-0.07759-0.13446zm1.5832-1.4237 0.34377-0.64066-0.46528-0.0087c-0.2559-0.0048-0.68583-0.0048-0.9554 0l-0.49012 0.0087 0.68278 1.2782 0.54047 0.0032zm1.9273-1.4316-1.1939 2.0723 0.73752-3.73e-4zm6.2374-0.57241-1.5474 1.7272h1.2008zm-7.6476-1.3603c2.0563-2.0734 4.4552-3.5316 6.4798-3.9388 0.41311-0.08308 1.1523-0.11296 1.5302-0.06184 0.75673 0.10236 1.456 0.47041 1.8378 0.96734 0.15635 0.20346 0.38188 0.67068 0.44998 0.9322 0.07127 0.27371 0.09817 1.0236 0.049 1.3664-0.03096 0.21586-0.05712 0.40483-0.05712 0.40483s-0.09193 5.04e-4 -0.19552 5.04e-4h-0.18072l0.02366-0.1661c0.01301-0.09135 0.02451-0.33694 0.02555-0.54575 0.0069-1.3884-0.75319-2.3004-2.1383-2.5657-0.3621-0.06935-1.0592-0.06885-1.4657 0.0011-1.7945 0.30866-3.941 1.5971-5.9985 3.6006l-0.41442 0.40355h-0.34081z" fill="#234a91"/></g></svg>
+  </div>
+
+
+  <script>
+    // IDs of your input fields in order
+    const inputIds = ["ht", "bf_disk", "au_diameter", "desired_angle", "ui_angle"];
+
+    inputIds.forEach((id, idx) => {
+      const input = document.getElementById(id);
+      input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          if (idx < inputIds.length - 1) {
+            document.getElementById(inputIds[idx + 1]).focus();
+          } else {
+            calculate();
+          }
+        }
+      });
+      // Highlight all text on focus
+      input.addEventListener('focus', function(event) {
+        event.target.select();
+      });
+    });
+
+    function setHT(val) {
+      document.getElementById("ht").value = val;
+    }
+
+    function calculate() {
+      const ht_kv = parseFloat(document.getElementById("ht").value);
+      const bf_disk = parseFloat(document.getElementById("bf_disk").value);
+      const au_diameter = parseFloat(document.getElementById("au_diameter").value);
+      const desired_angle = parseFloat(document.getElementById("desired_angle").value);
+      const ui_angle = parseFloat(document.getElementById("ui_angle").value);
+
+      if ([ht_kv, bf_disk, au_diameter, desired_angle, ui_angle].some(isNaN)) {
+        document.getElementById("output").innerHTML = "Please enter valid numbers in all fields. Use . as decimal separator.";
+        return;
+      }
+
+      // Constants (SI units)
+      const h = 6.62607015e-34;   // Planck's constant [J·s]
+      const c = 2.99792458e8;     // Speed of light [m/s]
+      const m_e = 9.1093837e-31;  // Electron mass [kg]
+      const e = 1.60217663e-19;   // Elementary charge [C]
+
+      const V = ht_kv * 1e3;      // Accelerating voltage [V]
+
+      // Relativistic electron wavelength [m]
+      const lambda_m = h / Math.sqrt(2 * m_e * e * V * (1 + (e * V) / (2 * m_e * c * c)));
+      // For display
+      const lambda_nm = lambda_m * 1e9;
+
+      // Au(111) d-spacing and Bragg angle
+      const d111_nm = 0.2354579;  // nm
+      const d111 = d111_nm / 1e9; // m
+      const G = 1 / d111_nm;      // 1/nm
+      let au_semiangle = Math.asin(lambda_m/(2*d111)) * 1000; // mrad
+
+      const scale = au_diameter / (2 * au_semiangle);
+      const actual_semiangle = bf_disk / scale; // mrad
+
+      const ui_toset = ui_angle / actual_semiangle * desired_angle;
+
+      // this gives the probe size only limited by diffraction. Not a good estimate.
+      // const expected_probesize = 0.61 * lambda_nm * 1000 / (desired_angle / 1000); // pm
+      // empirical formula, manually adjusted to fit the estimated probe size of CEOS aberration corrector predictions
+      // in the future, it would be nice to simulate probe sizes (e.g. abTEM) and make a more physical model
+      const expected_probesize = 0.61 * lambda_nm * 1000 / (desired_angle / 1000) + desired_angle * (410/ht_kv) - 0.4 * (lambda_nm)**0.3 - 5000 / ht_kv; // pm
+
+      /* const Cs_nm = 1000; // nm
+      const Cs = Cs_nm / 1e9; // m
+      const expected_probesize_m = 0.43 * Cs**0.25 * lambda_m**0.75; // m
+      const expected_probesize = expected_probesize_m * 1e12; // pm */
+
+      /* const Cs_nm = 200; // nm
+      const Cs = Cs_nm / 1e9; // m
+      const diffraction_contrib_pm = 0.61 * lambda_nm * 1000 / (desired_angle / 1000); // pm
+      const spherical_contrib_pm = 0.5 * (1e12) * Cs * (desired_angle / 1000)**3; // pm
+      const expected_probesize = diffraction_contrib_pm + spherical_contrib_pm; */
+
+      document.getElementById("output").innerHTML = `
+        <strong>Actual semiangle:</strong> ${actual_semiangle.toFixed(1)} mrad<br>
+        <strong>Set UI semiangle to:</strong> ${ui_toset.toFixed(1)} mrad<br>
+        <span title="at desired semiangle, empirical">Estimated probe size: ${expected_probesize.toFixed(0)} pm</span> 
+      `;
+    }
+  </script>
+
+</body>
+</html>
