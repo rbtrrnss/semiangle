@@ -1,5 +1,6 @@
 # Semiangle  
-Browser based tool to calculate the semiangle for scanning transmission electron microscopy (STEM) experiments.
+Browser based tool to calculate the semiangle for scanning transmission electron microscopy (STEM) experiments.  
+[You can try it on GitHub pages.](https://rbtrrnss.github.io/semiangle/)  
 
 ## Interface  
 The interface works on desktops and mobile browsers, users need to provide basic reference parameters of the BF disk and Au (111) diameter, then the actual probe semi convergence angle can be calculated.  
