@@ -191,29 +191,20 @@
 
       // this gives the probe size only limited by diffraction. Not a good estimate.
       // const expected_probesize = 0.61 * lambda_nm * 1000 / (desired_angle / 1000); // pm
+      
       // empirical formula, manually adjusted to fit the estimated probe size of CEOS aberration corrector predictions
       // in the future, it would be nice to simulate probe sizes (e.g. abTEM) and make a more physical model
       const expected_probesize = 0.61 * lambda_nm * 1000 / (desired_angle / 1000) + desired_angle * (410/ht_kv) - 0.4 * (lambda_nm)**0.3 - 5000 / ht_kv; // pm
 
-      /* const Cs_nm = 1000; // nm
-      const Cs = Cs_nm / 1e9; // m
-      const expected_probesize_m = 0.43 * Cs**0.25 * lambda_m**0.75; // m
-      const expected_probesize = expected_probesize_m * 1e12; // pm */
-
-      /* const Cs_nm = 200; // nm
-      const Cs = Cs_nm / 1e9; // m
-      const diffraction_contrib_pm = 0.61 * lambda_nm * 1000 / (desired_angle / 1000); // pm
-      const spherical_contrib_pm = 0.5 * (1e12) * Cs * (desired_angle / 1000)**3; // pm
-      const expected_probesize = diffraction_contrib_pm + spherical_contrib_pm; */
-
       document.getElementById("output").innerHTML = `
         <strong>Actual semiangle:</strong> ${actual_semiangle.toFixed(1)} mrad<br>
         <strong>Set UI semiangle to:</strong> ${ui_toset.toFixed(1)} mrad<br>
-        <span title="at desired semiangle, empirical">Estimated probe size: ${expected_probesize.toFixed(0)} pm</span> 
+        Estimated D<sub>50</sub> at ${desired_angle.toFixed(0)}: ${expected_probesize.toFixed(0)} pm  
       `;
     }
   </script>
 
 </body>
 </html>
+
 
