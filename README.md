@@ -11,7 +11,6 @@ The actual probe convergence semiangle is calculated.
 > - Hovering over the aberration parameters shows additional hints by alt texts/tooltips.  
 > - The hidden section also contains simulated Debye rings (simulation was done in [ReciPro](https://github.com/seto77/ReciPro)).  
 > - There is a marker that indicates the expected resolution in the Debye ring schematic based on the desired probe size.  
-> - Hovering over the aberration parameters shows additional hints by alt texts/tooltips.  
 
 > [!Warning]
 > Probe size estimation: There is no physical model included here. The used formula and parameters were manually fitted, so it matches the estimated D<sub>50</sub> of the C<sub>S</sub> corrector manufacturer.
