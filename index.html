@@ -16,7 +16,7 @@
       font-family: sans-serif;
       max-width: 600px;
       margin: auto;
-      padding: 1em;
+      padding: 0 1em;
     }
     label { font-weight: bold; display: block; margin-top: 1em; }
     /* make inputs fill their container but not exceed parent widths */
@@ -74,11 +74,13 @@
     /* triangle marker (hidden by default) */
     .ring-marker {
       position: absolute;
+      top: 50%;
       width: 0;
       height: 0;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-bottom: 12px solid #0acab0; /* triangle pointing down */
+      transform: translate(-50%, -100%);
       opacity: 0;
       transition: opacity 120ms ease-in-out;
       pointer-events: none;
@@ -92,7 +94,7 @@
   <h1>Semiangle Calculator</h1>
 
   <form onsubmit="calculate(); return false;">
-    <label>High Tension (HT) [kV]:
+    <label>High Tension [kV]:
       <input type="number" id="ht" value="300" enterkeyhint="next">
     </label>
     Presets:
@@ -270,22 +272,13 @@
       const visible_rings = expected_probesize > 0 ? 1000 / expected_probesize : 0; // nm^-1
       const pixel_resolution = 0.0281261; // nm^-1 per pixel
       const marker_position_px = 34 + visible_rings / pixel_resolution; // px, 34px is the offset for the (000) spot
+      const marker_reference_extent_px = 512; // reciprocal image extent used for marker_position_px scaling
 
-      // position and reveal the triangular marker (tip aligned to marker_position_px)
+      // position and reveal the triangular marker
       const marker = document.getElementById('ringMarker');
-      const container = document.querySelector('.rings-container');
-      // determine triangle height from computed CSS (border-bottom width)
-      const triangleHeight = marker ? (parseFloat(getComputedStyle(marker).borderBottomWidth) || 12) : 12; // px
-      if (marker && container && visible_rings > 0) {
-        // set horizontal position (tip of triangle will be at this x)
-        const tipPadding = 5; // px; horizontal visual half-width of triangle
-        const contW = container.getBoundingClientRect().width || container.clientWidth;
-        const leftClamped = Math.round(Math.min(Math.max(marker_position_px, tipPadding), Math.max(tipPadding, contW - tipPadding)));
-        marker.style.left = `${leftClamped}px`;
-        // compute top so the triangle tip (bottom of element) is vertically centered
-        const contH = container.getBoundingClientRect().height || container.clientHeight;
-        const topPx = Math.round(contH / 2);
-        marker.style.top = `${topPx}px`;
+      if (marker && visible_rings > 0) {
+        const xPercent = Math.min(Math.max(marker_position_px / marker_reference_extent_px, 0), 1) * 100;
+        marker.style.left = `${xPercent}%`;
         marker.classList.add('visible');
       } else if (marker) {
         marker.classList.remove('visible');
