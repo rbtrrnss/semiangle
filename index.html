@@ -7,6 +7,7 @@
   <!--
   Original HTML Application (HTA) written by Armand Béché (~2008).
   Adapted to a web page by Alexander Zintler (2025).  
+  Debye rings simulated with ReciPro https://github.com/seto77/ReciPro
   -->
   <style>
     body {
@@ -76,7 +77,15 @@
         <input type="number" id="bf_disk" value="210" enterkeyhint="next" step="any">
       </label>
 
-      <label>Au (111) diameter [px]:
+      <label>
+        <nobr>Au&nbsp;<select name="hkl" id="hkl">
+          <option value="111">(111)</option>
+          <option value="200">(200)</option>
+          <option value="220">(220)</option>
+          <option value="113">(113)</option>
+          <option value="222" style="color:gray">(222)</option>
+          <option value="400">(400)</option>
+        </select>&nbsp;diameter [px]:</nobr>
         <input type="number" id="au_diameter" value="100" enterkeyhint="next" step="any">
       </label>
     </div>
@@ -100,7 +109,7 @@
 
   <div class="targets" id="targets">
     <details>
-      <summary>aberration target parameters 300 kV</summary>
+      <summary>aberration target parameters 300 kV, Au Debee rings</summary>
        <table>
         <tr>
           <th>C1</th>
@@ -122,14 +131,17 @@
           <td style="background-color:lemonchiffon">&#60;2 µm</td>
           <td style="background-color:lemonchiffon">&#60;50 µm</td>
         </tr>
-      </table>
+      </table><br>
+      <center>
+      <img src="data:image/png;base64,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" alt="Debye rings of Au, simulated with ReciPro">
+      </center>
     </details>
   </div>
 
 
   <script>
     // IDs of your input fields in order
-    const inputIds = ["ht", "bf_disk", "au_diameter", "desired_angle", "ui_angle"];
+    const inputIds = ["ht", "bf_disk", "au_diameter", "desired_angle", "ui_angle", "hkl"];
 
     inputIds.forEach((id, idx) => {
       const input = document.getElementById(id);
@@ -178,11 +190,31 @@
       // For display
       const lambda_nm = lambda_m * 1e9;
 
-      // Au(111) d-spacing and Bragg angle
-      const d111_nm = 0.2354579;  // nm
-      const d111 = d111_nm / 1e9; // m
-      const G = 1 / d111_nm;      // 1/nm
-      let au_semiangle = Math.asin(lambda_m/(2*d111)) * 1000; // mrad
+      // Au lattice distance table (nm)
+      const d111_nm = 0.2354579; // nm
+      const d200_nm = 0.2039125; // nm
+      const d220_nm = 0.1441879; // nm
+      const d113_nm = 0.1229639; // nm
+      const d222_nm = 0.1177289; // nm
+      const d400_nm = 0.1019563; // nm
+
+      // Choose d-spacing based on selected HKL
+      const hkl = document.getElementById("hkl").value;
+      let d_nm;
+      switch (hkl) {
+        case "200": d_nm = d200_nm; break;
+        case "220": d_nm = d220_nm; break;
+        case "113": d_nm = d113_nm; break;
+        case "222": d_nm = d222_nm; break;
+        case "400": d_nm = d400_nm; break;
+        case "111":
+        default:
+          d_nm = d111_nm; break;
+      }
+
+      const d_m = d_nm / 1e9; // m
+      const G = 1 / d_nm; // 1/nm
+      let au_semiangle = Math.asin(lambda_m / (2 * d_m)) * 1000; // mrad
 
       const scale = au_diameter / (2 * au_semiangle);
       const actual_semiangle = bf_disk / scale; // mrad
