@@ -3,13 +3,13 @@ Browser based tool to calculate the semiangle for scanning transmission electron
 [You can try it on GitHub pages.](https://rbtrrnss.github.io/semiangle/)  
 
 ## Usage  
-Provide experimental BF disk and a Au Debye ring diameter (selectable d-spacing).  
+Provide experimental BF disk diameter and Au Debye ring diameter. Latter is selectable from a list, corresponding diffraction ring is highlighted.  
 The actual probe convergence semiangle is calculated.   
  
 [<img src="screenshot.png" height="600"/>](screenshot.png "screenshot of the semiangle calculator, it includes input fields for high tension, BF disk diameter, Au (111) diameter, desired semiangle and the angle that the UI displays, there are also the results shown as well as a summary of desired aberration parameters")  
 > [!Tip]
 > - Hovering over the aberration parameters shows additional hints by alt texts/tooltips.  
-> - The hidden section also contains simulated Debye rings (simulation was done in [ReciPro](https://github.com/seto77/ReciPro)).  
+> - The details section also contains simulated Debye rings (simulation was done in [ReciPro](https://github.com/seto77/ReciPro)).  
 > - There is a marker that indicates the expected resolution in the Debye ring schematic based on the desired probe size.  
 
 > [!Warning]
