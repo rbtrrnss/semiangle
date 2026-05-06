@@ -9,6 +9,7 @@
   Adapted to a web page by Alexander Zintler (2025).  
   Debye rings simulated with ReciPro https://github.com/seto77/ReciPro
   -->
+  <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
   <style>
     /* make box-sizing consistent so widths include padding */
     *, *::before, *::after { box-sizing: border-box; }
@@ -106,6 +107,68 @@
       justify-content: space-between;
       padding: 0px 0px;
     }
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .theme-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.35em;
+      user-select: none;
+    }
+    .theme-emoji {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+    .theme-switch {
+      position: relative;
+      width: 42px;
+      height: 22px;
+      display: inline-block;
+    }
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .theme-slider {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      background-color: #d7dce3;
+      border: 1px solid #8c96a6;
+      border-radius: 999px;
+      transition: background-color 0.2s ease;
+    }
+    .theme-slider::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 2px;
+      top: 2px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease;
+    }
+    .theme-switch {
+      margin-top: 0px;
+    }
+    .theme-switch input:checked + .theme-slider {
+      background-color: #4a5568;
+      border-color: #66748c;
+    }
+    .theme-switch input:checked + .theme-slider::before {
+      transform: translateX(20px);
+      background-color: #f3f4f6;
+    }
+    .theme-switch input:focus-visible + .theme-slider {
+      outline: 2px solid #2f6feb;
+      outline-offset: 2px;
+    }
     @media (prefers-color-scheme: dark) {
       body {
         background-color: #0f1115;
@@ -140,12 +203,107 @@
         fill: #0f1115;
       }
     }
+    body.dark-mode {
+      background-color: #0f1115;
+      color: #e8ecf1;
+    }
+    body.dark-mode a { color: #8ab4f8; }
+    body.dark-mode header a img { filter: invert(1); }
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode button {
+      background-color: #1a1f28;
+      color: #e8ecf1;
+      border-color: #4a5568;
+    }
+    body.dark-mode .output {
+      background: #1a1f28;
+      color: #e8ecf1;
+    }
+    body.dark-mode .targets details {
+      color: #e8ecf1;
+    }
+    body.dark-mode .targets table,
+    body.dark-mode .targets th,
+    body.dark-mode .targets td {
+      border-color: #5a6473;
+    }
+    body.dark-mode .targets th[style*="background-color:lemonchiffon"],
+    body.dark-mode .targets td[style*="background-color:lemonchiffon"] {
+      background-color: #7a6200 !important;
+      color: #fff4b8;
+    }
+    body.dark-mode #hkltxt,
+    body.dark-mode #pmtxt,
+    body.dark-mode #hkltxt2,
+    body.dark-mode #pmtxt2,
+    body.dark-mode #markers,
+    body.dark-mode #scaletxt {
+      filter: invert(1);
+    }
+    body.dark-mode #topbar,
+    body.dark-mode #bottombar {
+      fill: #0f1115;
+    }
+
+    body.light-mode {
+      background-color: #ffffff;
+      color: #111111;
+    }
+    body.light-mode a { color: #0a58ca; }
+    body.light-mode header a img { filter: none; }
+    body.light-mode input,
+    body.light-mode select,
+    body.light-mode button {
+      background-color: #ffffff;
+      color: #111111;
+      border-color: #999999;
+    }
+    body.light-mode .output {
+      background: #f0f0f0;
+      color: #111111;
+    }
+    body.light-mode .targets details {
+      color: #111111;
+    }
+    body.light-mode .targets table,
+    body.light-mode .targets th,
+    body.light-mode .targets td {
+      border-color: gray;
+    }
+    body.light-mode .targets th[style*="background-color:lemonchiffon"],
+    body.light-mode .targets td[style*="background-color:lemonchiffon"] {
+      background-color: lemonchiffon !important;
+      color: #111111;
+    }
+    body.light-mode #hkltxt,
+    body.light-mode #pmtxt,
+    body.light-mode #hkltxt2,
+    body.light-mode #pmtxt2,
+    body.light-mode #markers,
+    body.light-mode #scaletxt {
+      filter: none;
+    }
+    body.light-mode #topbar,
+    body.light-mode #bottombar {
+      fill: #ffffff;
+    }
   </style>
 </head>
 <body>
 <header>
   <h1>Semiangle Calculator</h1>
-  <span><a href="https://github.com/rbtrrnss/semiangle"><img src="https://github.com/favicon.ico" alt="Github link" height="14px"/>&nbsp;rbtrrnss/semiangle</a></span>
+  <div class="header-controls">
+    <div class="theme-toggle-wrap" aria-label="Theme toggle">
+      <span class="theme-emoji" aria-hidden="true">🌞</span>
+      <label class="theme-switch" for="themeToggle">
+        <input type="checkbox" id="themeToggle" aria-label="Toggle light and dark mode">
+        <span class="theme-slider" aria-hidden="true"></span>
+      </label>
+      <span class="theme-emoji" aria-hidden="true">🌙</span>
+    </div>
+    <span><a href="https://github.com/rbtrrnss/semiangle"><img src="./images/GitHub_Invertocat_Black_Clearspace.svg" alt="Github link" height="14px"/>&nbsp;rbtrrnss/semiangle</a></span>
+  </div>
 </header>
 
   <form onsubmit="calculate(); return false;">
@@ -168,7 +326,7 @@
           <option value="111">(111)</option>
           <option value="200">(200)</option>
           <option value="220">(220)</option>
-          <option value="113">(113)</option>
+          <option value="311">(311)</option>
           <option value="400">(400)</option>
         </select>&nbsp;diameter [px]:</nobr>
         <input type="number" id="au_diameter" value="100" enterkeyhint="next" step="any">
@@ -300,6 +458,33 @@
 
 
   <script>
+    function applyTheme(theme) {
+      document.body.classList.remove("light-mode", "dark-mode");
+      document.body.classList.add(theme + "-mode");
+      const toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        const isDark = theme === "dark";
+        toggle.checked = isDark;
+        toggle.title = isDark ? "Switch to light mode" : "Switch to dark mode";
+      }
+    }
+
+    (function initTheme() {
+      const savedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+      applyTheme(initialTheme);
+    })();
+
+    const themeToggle = document.getElementById("themeToggle");
+    if (themeToggle) {
+      themeToggle.addEventListener("click", function () {
+        const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
+        applyTheme(nextTheme);
+        localStorage.setItem("theme", nextTheme);
+      });
+    }
+
     // IDs of input fields in order to tab through them in the correct order
     const inputIds = ["ht", "bf_disk", "au_diameter", "desired_angle", "ui_angle", "hkl"];
 
@@ -363,7 +548,7 @@
       const d111_nm = 0.2354579; // nm
       const d200_nm = 0.2039125; // nm
       const d220_nm = 0.1441879; // nm
-      const d113_nm = 0.1229639; // nm
+      const d311_nm = 0.1229639; // nm
       const d222_nm = 0.1177289; // nm
       const d400_nm = 0.1019563; // nm
 
@@ -373,7 +558,7 @@
       switch (hkl) {
         case "200": d_nm = d200_nm; break;
         case "220": d_nm = d220_nm; break;
-        case "113": d_nm = d113_nm; break;
+        case "311": d_nm = d311_nm; break;
         case "222": d_nm = d222_nm; break;
         case "400": d_nm = d400_nm; break;
         case "111":
@@ -414,7 +599,7 @@
 
       // Highlight the selected Debye ring in the same color as the marker.
       const ringHighlightColor = "#0acab0";
-      const selectedRingId = hkl === "113" ? "311" : hkl;
+      const selectedRingId = hkl;
       const rings = document.querySelectorAll('.rings-container svg circle[id]');
       rings.forEach((ring) => {
         if (!ring.dataset.baseStroke) {
